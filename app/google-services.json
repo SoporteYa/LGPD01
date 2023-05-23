@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "301460545650",
+    "project_id": "lgpd01-9dd02",
+    "storage_bucket": "lgpd01-9dd02.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:301460545650:android:7f666623bb4bf9ac2362eb",
+        "android_client_info": {
+          "package_name": "es.informaticoya.lgpd01"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "301460545650-21mijdcs2m2sg9ei5vg1jkbm8mldb3cn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDF8rbOk-SHQ8rSGUmdCgqEiv1Wsl0_7cg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "301460545650-21mijdcs2m2sg9ei5vg1jkbm8mldb3cn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
