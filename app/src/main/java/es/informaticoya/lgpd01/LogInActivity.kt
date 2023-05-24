@@ -34,14 +34,17 @@ class LogInActivity : AppCompatActivity() {
                 loginUser()
             }
         }
+
+        binding.btnNext.setOnClickListener {
+            startActivity(Intent(this, UsuarioActivity::class.java))
+        }
     }
 
 
     private fun loginUser() {
         auth.signInWithEmailAndPassword(
             binding.etEmail.text.toString(),
-            binding.etPassword.text.toString()
-        ).addOnCompleteListener(this) {
+            binding.etPassword.text.toString()).addOnCompleteListener(this) {
             if (it.isSuccessful) {
                 startActivity(Intent(this, UsuarioActivity::class.java))
                 Toast.makeText(this, "Bienvenido", Toast.LENGTH_SHORT).show()
@@ -50,7 +53,6 @@ class LogInActivity : AppCompatActivity() {
             }
         }
     }
-
 
     override fun onStart() {
         super.onStart()

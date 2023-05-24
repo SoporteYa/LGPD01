@@ -1,9 +1,8 @@
 package es.informaticoya.lgpd01
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import es.informaticoya.lgpd01.databinding.ActivitySignUpBinding
 
@@ -40,14 +39,7 @@ class SignUpActivity : AppCompatActivity() {
                     user!!.sendEmailVerification()
                 }
             }
+         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        val user = auth.currentUser
-        if (user != null) {
-            startActivity(Intent(this, UsuarioActivity::class.java))
-        }
-    }
-}
 
