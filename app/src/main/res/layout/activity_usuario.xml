@@ -15,8 +15,8 @@
             android:id="@+id/topAppBarClose"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/close_24"
-            app:title="@string/app_name" />
+            app:menu="@menu/top_app_bar_menu"
+            app:title="@string/LGPD" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -26,8 +26,30 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Scrollable content -->
-
+        <Button
+            android:id="@+id/list_popup_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="16dp"
+            android:text="@string/companies"
+            android:backgroundTint="@color/background_button"/>
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        style="@style/Widget.Material3.BottomAppBar"
+        app:menu="@menu/bottom_app_bar"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/more_24"
+        app:layout_anchor="@id/bottomAppBar"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
