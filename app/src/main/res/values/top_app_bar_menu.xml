@@ -1,0 +1,55 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/edit"
+        android:icon="@drawable/edit_24"
+        android:title="@string/edit"
+        android:contentDescription="@string/content_description_search"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/save"
+        android:icon="@drawable/baseline_save_24"
+        android:title="@string/favorite"
+        android:contentDescription="@string/content_description_favorite"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/more"
+        android:icon="@drawable/more_24"
+        android:title="@string/more"
+        android:contentDescription="@string/content_description_more"
+        app:showAsAction="always" />
+
+
+    <item
+        android:id="@+id/company"
+        android:icon="@drawable/more_24"
+        android:title="@string/RegistrarEmpresa"
+        android:contentDescription="@string/content_description_more"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/sector"
+        android:icon="@drawable/more_24"
+        android:title="@string/RegistrarSectores"
+        android:contentDescription="@string/content_description_more"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/process"
+        android:icon="@drawable/more_24"
+        android:title="@string/RegistrarProcesos"
+        android:contentDescription="@string/content_description_more"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/closed"
+        android:icon="@drawable/close_24"
+        android:title="@string/CerrarSesión"
+        android:contentDescription="@string/content_description_more"
+        app:showAsAction="never" />
+
+
+</menu>
