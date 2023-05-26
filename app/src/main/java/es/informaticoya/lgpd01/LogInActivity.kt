@@ -44,23 +44,28 @@ class LogInActivity : AppCompatActivity() {
     private fun loginUser() {
         auth.signInWithEmailAndPassword(
             binding.etEmail.text.toString(),
-            binding.etPassword.text.toString()).addOnCompleteListener(this) {
+            binding.etPassword.text.toString()
+        ).addOnCompleteListener(this) {
             if (it.isSuccessful) {
                 startActivity(Intent(this, UsuarioActivity::class.java))
+                FirebaseAuth.getInstance().currentUser?.email
                 Toast.makeText(this, "Bienvenido", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, UsuarioActivity::class.java))
             } else {
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    override fun onStart() {
+
+
+   /* override fun onStart() {
         super.onStart()
         val user = auth.currentUser
         if (user != null) {
-            startActivity(Intent(this, UsuarioActivity::class.java))
+            startActivity(Intent(this, LogInActivity::class.java))
         }
-    }
+    }*/
 }
 
 
