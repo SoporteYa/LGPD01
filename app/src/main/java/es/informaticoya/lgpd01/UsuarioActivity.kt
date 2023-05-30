@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
 import es.informaticoya.lgpd01.databinding.ActivityUsuarioBinding
 
 
@@ -16,6 +15,11 @@ class UsuarioActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUsuarioBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        binding.btnCompany.setOnClickListener {
+            startActivity(Intent(this, EmpresasActivity::class.java))
+        }
 
 
         binding.topAppBarClose.setOnMenuItemClickListener {
@@ -81,7 +85,7 @@ class UsuarioActivity : AppCompatActivity() {
     }
 
     private fun clickCompany(){
-       startActivity(Intent(this, EmpresaActivity::class.java))
+       startActivity(Intent(this, RegistroEmpresaActivity::class.java))
     }
 
     private fun clickSector(){

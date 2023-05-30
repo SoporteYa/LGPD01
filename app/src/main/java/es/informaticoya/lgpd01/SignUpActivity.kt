@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import es.informaticoya.lgpd01.databinding.ActivitySignUpBinding
 
 class SignUpActivity : AppCompatActivity() {
@@ -47,11 +46,7 @@ class SignUpActivity : AppCompatActivity() {
             }
     }
 
-        private fun Datos(email: String){
-            val datosIntent:Intent = Intent (this, EmpresaActivity::class.java).apply{
-                putExtra("email", email)
-        }
-    }
+
 
    /* private fun authentication() {
         auth.createUserWithEmailAndPassword(

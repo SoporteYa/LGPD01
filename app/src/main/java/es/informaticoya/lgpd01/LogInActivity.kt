@@ -48,7 +48,7 @@ class LogInActivity : AppCompatActivity() {
         ).addOnCompleteListener(this) {
             if (it.isSuccessful) {
                 startActivity(Intent(this, UsuarioActivity::class.java))
-                FirebaseAuth.getInstance().currentUser?.email
+                FirebaseAuth.getInstance().currentUser?.uid
                 Toast.makeText(this, "Bienvenido", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, UsuarioActivity::class.java))
             } else {
