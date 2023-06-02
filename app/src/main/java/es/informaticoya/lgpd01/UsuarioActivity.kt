@@ -17,9 +17,10 @@ class UsuarioActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        binding.btnCompany.setOnClickListener {
-            startActivity(Intent(this, EmpresasActivity::class.java))
-        }
+       binding.cardViewCompany.setOnClickListener{
+           startActivity(Intent(this, EmpresasActivity::class.java))
+       }
+
 
 
         binding.topAppBarClose.setOnMenuItemClickListener {
@@ -34,10 +35,6 @@ class UsuarioActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.save -> {
-                    clickSave()
-                    true
-                }
 
                 R.id.more -> {
                     clickMore()
@@ -48,6 +45,12 @@ class UsuarioActivity : AppCompatActivity() {
                     clickCompany()
                     true
                 }
+
+                R.id.user -> {
+                    clickUser()
+                    true
+                }
+
 
                 R.id.sector -> {
                     clickSector()
@@ -86,6 +89,10 @@ class UsuarioActivity : AppCompatActivity() {
 
     private fun clickCompany(){
        startActivity(Intent(this, RegistroEmpresaActivity::class.java))
+    }
+
+    private fun clickUser(){
+        startActivity(Intent(this, RegistroUsuariosActivity::class.java))
     }
 
     private fun clickSector(){
