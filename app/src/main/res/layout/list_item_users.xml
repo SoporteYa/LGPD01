@@ -13,6 +13,20 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Name"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/tvLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lastName"
+            android:textSize="20sp"/>
+
+        <TextView
             android:id="@+id/tvCompany"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,10 +34,10 @@
             android:textSize="20sp"/>
 
         <TextView
-            android:id="@+id/tvAddress"
+            android:id="@+id/tvSector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/Address"
+            android:text="@string/sector"
             android:textSize="20sp"/>
 
         <LinearLayout

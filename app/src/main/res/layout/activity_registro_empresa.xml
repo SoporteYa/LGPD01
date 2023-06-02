@@ -45,16 +45,6 @@
         android:layout_marginEnd="32dp"/>
 
 
-
-    <Button
-        android:id="@+id/btnEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/edit"
-        android:layout_marginTop="450dp"
-        android:layout_marginStart="32dp"
-        android:backgroundTint="@color/background_button"/>
-
     <Button
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
@@ -63,16 +53,6 @@
         android:layout_marginTop="450dp"
         android:layout_marginStart="160dp"
         android:backgroundTint="@color/background_button"/>
-
-    <Button
-        android:id="@+id/btnDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Delete"
-        android:layout_marginTop="450dp"
-        android:layout_marginStart="300dp"
-        android:backgroundTint="@color/background_button"/>
-
 
 
 
