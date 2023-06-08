@@ -3,6 +3,7 @@ package es.informaticoya.lgpd01
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import es.informaticoya.lgpd01.databinding.ActivityEmpresasBinding
 
 
-class EmpresasActivity : AppCompatActivity() {
+class EmpresasActivity : AppCompatActivity(), MyAdapter.OnProcesoClickListener,
+    MyAdapter.OnSectorClickListener, MyAdapter.OnEmpleadoClickListener {
 
     private lateinit var rv: RecyclerView
     private lateinit var companyList: ArrayList<Company>
@@ -32,6 +34,11 @@ class EmpresasActivity : AppCompatActivity() {
 
 
         db = FirebaseFirestore.getInstance()
+        myAdapter.setOnProcesoClickListener(this)
+        myAdapter.setOnSectorClickListener(this)
+        myAdapter.setOnEmpleadoClickListener(this)
+        rv.adapter = myAdapter
+
 
 
         mostrarEmpresas()
@@ -47,7 +54,7 @@ class EmpresasActivity : AppCompatActivity() {
                 .whereEqualTo("userId", userId)
                 .get()
                 .addOnSuccessListener { snapshot ->
-                    //companyList.clear() // Limpiar la lista antes de agregar nuevos elementos
+                    companyList.clear() // Limpiar la lista antes de agregar nuevos elementos
 
                     for (document in snapshot.documents) {
                         val company: Company? = document.toObject(Company::class.java)
@@ -56,10 +63,7 @@ class EmpresasActivity : AppCompatActivity() {
                         }
                     }
 
-                    rv.adapter = MyAdapter(
-                        companyList,
-                        this
-                    ) // Configurar el adaptador con la lista actualizada
+                    myAdapter.notifyDataSetChanged()
                 }
                 .addOnFailureListener { exception ->
                     Toast.makeText(
@@ -79,12 +83,13 @@ class EmpresasActivity : AppCompatActivity() {
                 .document()
                 .delete()
                 .addOnSuccessListener { snapshot ->
-                    //companyList.clear() // Limpiar la lista antes de agregar nuevos elementos
+                    companyList.clear() // Limpiar la lista antes de agregar nuevos elementos
 
                     Toast.makeText(this, "Empresa eliminada correctamente", Toast.LENGTH_SHORT).show()
 
                     companyList.remove(company)
                     rv.adapter?.notifyDataSetChanged()
+                    startActivity(Intent(this, UsuarioActivity::class.java))
                 }
                 .addOnFailureListener { exception ->
                     Toast.makeText(
@@ -95,7 +100,28 @@ class EmpresasActivity : AppCompatActivity() {
                 }
         }
     }
+
+    override fun onEmpleadoClick(position: Int) {
+        Log.d("EmpresasActivity", "onItemClick: $position")
+        // Realiza las acciones necesarias cuando se pulsa el btn en el recyclerView
+        startActivity(Intent(this, EmpresasActivity::class.java))
+    }
+
+    override fun onProcesoClick(position: Int) {
+        Log.d("EmpresasActivity", "onItemClick: $position")
+        // Realiza las acciones necesarias cuando se pulsa el btn en el recyclerView
+       startActivity(Intent(this, ProcesoActivity::class.java))
+    }
+
+    override fun onSectorClick(position: Int) {
+        Log.d("EmpresasActivity", "onItemClick: $position")
+        // Realiza las acciones necesarias cuando se pulsa el btn en el recyclerView
+        startActivity(Intent(this, SectorActivity::class.java))
+    }
 }
+
+
+
 
 
 

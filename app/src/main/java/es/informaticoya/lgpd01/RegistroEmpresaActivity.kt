@@ -11,9 +11,13 @@ import es.informaticoya.lgpd01.databinding.ActivityRegistroEmpresaBinding
 
 class RegistroEmpresaActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityRegistroEmpresaBinding
+    private lateinit var binding: ActivityRegistroEmpresaBinding
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
+
+    companion object {
+        var empresaId: String? = null
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,58 +33,48 @@ class RegistroEmpresaActivity : AppCompatActivity() {
 
 
         binding.btnSave.setOnClickListener {
-            insertarEmpresa()
-            startActivity(Intent(this, UsuarioActivity::class.java))
-        }
-
-
-        binding.btnEdit.setOnClickListener {
-
-        }
-
-        binding.btnDelete.setOnClickListener {
-
+            guardarEmpresa()
+            startActivity(Intent(this, RegistroUsuariosActivity::class.java))
         }
     }
 
 
+    private fun guardarEmpresa() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
 
-    private fun insertarEmpresa() {
-        FirebaseAuth.getInstance().currentUser?.uid
+        val empresasCollection = db.collection("empresas")
 
         val empresaDatos = hashMapOf(
             "company" to binding.etCompany.text.toString(),
-            "address" to binding.etAddress.text.toString()
+            "address" to binding.etAddress.text.toString(),
+            "userId" to userId
         )
-        db.collection("empresas").document()
-            .set(empresaDatos)
-            .addOnSuccessListener {
+        empresasCollection.add(empresaDatos)
+            .addOnSuccessListener { documentReference ->
+                val empresaId = documentReference.id
                 Toast.makeText(this, "Guardado", Toast.LENGTH_SHORT).show()
-                val company = binding.etCompany.text.toString()
-                val address = binding.etAddress.text.toString()
-                DataHolder.company = company
-                DataHolder.address = address
-                startActivity(Intent(this, UsuarioActivity::class.java))
+                if (userId != null) {
+                    val usuarioDocument = db.collection("usuarios").document(userId)
+                    usuarioDocument.update("empresaId", empresaId)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener { exception ->
+                            Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
+                        }
+                }
             }
-            .addOnFailureListener {
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "La empresa no pudo ser guardada", Toast.LENGTH_SHORT).show()
             }
     }
 }
 
 
-
-
-/*private fun insertarEmpresa() {
-        FirebaseAuth.getInstance().currentUser?.email
-        db.collection("empresas").document().set(
-            hashMapOf("company" to binding.etCompany.text.toString(), "address" to
-                    binding.etAddress.text.toString())).addOnSuccessListener { documentReference ->
-            Toast.makeText(this, "Guardado", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener {
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-        }
-      }
-   }*/
+/*val company = binding.etCompany.text.toString()
+val address = binding.etAddress.text.toString()
+DataHolder.company = company
+DataHolder.address = address
+//startActivity(Intent(this, UsuarioActivity::class.java))*/
 
 

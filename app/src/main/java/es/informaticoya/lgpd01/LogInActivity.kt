@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import es.informaticoya.lgpd01.databinding.ActivityLogInBinding
 
 class LogInActivity : AppCompatActivity() {
@@ -55,6 +56,30 @@ class LogInActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
             }
         }
+
+
+        val db = FirebaseFirestore.getInstance()
+
+        val userCollection = db.collection("usuarios")
+
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+        val datosUsuario = hashMapOf(
+            "email" to binding.etEmail.text.toString(),
+            "password" to binding.etPassword.text.toString()
+        )
+
+        if (userId != null) {
+            userCollection.document(userId)
+                .set(datosUsuario)
+                .addOnSuccessListener {
+                  Toast.makeText(this, "Guardado", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+                }
+        }
+
     }
 
 
