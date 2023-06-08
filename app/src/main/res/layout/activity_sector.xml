@@ -105,6 +105,16 @@
             android:layout_marginEnd="16dp"
             android:textColor="@color/background_letter"
             android:background="@android:color/transparent"/>
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            app:layout_constraintTop_toBottomOf="@+id/btnMore"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:backgroundTint="@color/background_button"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

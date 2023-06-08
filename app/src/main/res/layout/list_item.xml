@@ -29,29 +29,61 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnEmpleados"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/background_button"
+                android:layout_marginStart="8dp"
+                android:text="@string/empleados"/>
+
+            <Button
+                android:id="@+id/btnSector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/background_button"
+                android:layout_marginStart="8dp"
+                android:text="@string/sector"/>
+
+            <Button
+                android:id="@+id/btnProcesos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/background_button"
+                android:layout_marginStart="8dp"
+                android:text="@string/Process"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:weightSum="2">
+            android:gravity="center">
 
             <Button
                 android:id="@+id/btnEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@color/background_button"
-                android:text="@string/edit"/>
+                android:text="@string/edit"
+                android:textColor="@color/black"
+                android:drawableLeft="@drawable/edit_24"
+                android:background="@android:color/transparent"
+                android:textSize="16sp"/>
 
             <Button
                 android:id="@+id/btnDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@color/background_button"
-                android:text="@string/Delete"/>
-
-
+                android:text="@string/Delete"
+                android:textColor="@color/black"
+                android:drawableLeft="@drawable/delete_24"
+                android:background="@android:color/transparent"
+                android:textSize="16sp"/>
 
         </LinearLayout>
-
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
