@@ -2,11 +2,14 @@ package es.informaticoya.lgpd01
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import es.informaticoya.lgpd01.databinding.ActivityRegistroEmpresaBinding
+import com.google.firebase.firestore.DocumentReference
+import es.informaticoya.lgpd01.databinding.ActivityRegistroUsuariosBinding
 
 
 class RegistroEmpresaActivity : AppCompatActivity() {
@@ -34,15 +37,41 @@ class RegistroEmpresaActivity : AppCompatActivity() {
 
         binding.btnSave.setOnClickListener {
             guardarEmpresa()
-            startActivity(Intent(this, RegistroUsuariosActivity::class.java))
+            startActivity(Intent(this, EmpresasActivity::class.java))
         }
+
     }
 
 
     private fun guardarEmpresa() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val userId: String? = FirebaseAuth.getInstance().currentUser?.uid
+        userId?.let { uid ->
+            val usuarioDocument = db.collection("usuarios").document(uid)
+            val empresasCollection = usuarioDocument.collection("empresas")
 
+            val empresaDatos = hashMapOf(
+                "company" to binding.etCompany.text.toString(),
+                "address" to binding.etAddress.text.toString()
+            )
+
+            empresasCollection.add(empresaDatos)
+                .addOnSuccessListener { documentReference ->
+                    val empresaId = documentReference.id // Obtener el ID de la empresa recién creada
+                    Toast.makeText(this, "Guardado", Toast.LENGTH_SHORT).show()
+                    RegistroEmpresaActivity.empresaId = empresaId // Asignar el ID de la empresa a la variable empresaId en el companion object
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(this, "La empresa no pudo ser guardada", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+
+
+   /* private fun guardarEmpresa() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
         val empresasCollection = db.collection("empresas")
+
 
         val empresaDatos = hashMapOf(
             "company" to binding.etCompany.text.toString(),
@@ -51,7 +80,7 @@ class RegistroEmpresaActivity : AppCompatActivity() {
         )
         empresasCollection.add(empresaDatos)
             .addOnSuccessListener { documentReference ->
-                val empresaId = documentReference.id
+                val empresaId = documentReference.id // Obtener el ID de la empresa recién creada
                 Toast.makeText(this, "Guardado", Toast.LENGTH_SHORT).show()
                 if (userId != null) {
                     val usuarioDocument = db.collection("usuarios").document(userId)
@@ -63,18 +92,15 @@ class RegistroEmpresaActivity : AppCompatActivity() {
                             Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
                         }
                 }
+                RegistroEmpresaActivity.empresaId =
+                    empresaId // Asignar el ID de la empresa a la variable empresaId en el companion object
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "La empresa no pudo ser guardada", Toast.LENGTH_SHORT).show()
             }
-    }
+    }*/
 }
 
 
-/*val company = binding.etCompany.text.toString()
-val address = binding.etAddress.text.toString()
-DataHolder.company = company
-DataHolder.address = address
-//startActivity(Intent(this, UsuarioActivity::class.java))*/
 
 

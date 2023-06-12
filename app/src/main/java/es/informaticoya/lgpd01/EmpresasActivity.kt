@@ -50,6 +50,37 @@ class EmpresasActivity : AppCompatActivity(), MyAdapter.OnProcesoClickListener,
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
         if (userId != null) {
+            db.collection("usuarios").document(userId)
+                .collection("empresas")
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    companyList.clear() // Limpiar la lista antes de agregar nuevos elementos
+
+                    for (document in snapshot.documents) {
+                        val empresaId = document.id
+                        val company = document.toObject(Company::class.java)
+                        company?.let {
+                            it.empresaId = empresaId
+                            companyList.add(it)
+                        }
+                    }
+
+                    myAdapter.notifyDataSetChanged()
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(
+                        this,
+                        "Error al obtener las empresas: ${exception.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+        }
+    }
+
+    /*private fun mostrarEmpresas() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+        if (userId != null) {
             db.collection("empresas")
                 .whereEqualTo("userId", userId)
                 .get()
@@ -72,8 +103,8 @@ class EmpresasActivity : AppCompatActivity(), MyAdapter.OnProcesoClickListener,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-        }
-    }
+        }*/
+
 
      fun borrarEmpresas(company: Company) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -104,7 +135,7 @@ class EmpresasActivity : AppCompatActivity(), MyAdapter.OnProcesoClickListener,
     override fun onEmpleadoClick(position: Int) {
         Log.d("EmpresasActivity", "onItemClick: $position")
         // Realiza las acciones necesarias cuando se pulsa el btn en el recyclerView
-        startActivity(Intent(this, EmpresasActivity::class.java))
+        startActivity(Intent(this, RegistroUsuariosActivity::class.java))
     }
 
     override fun onProcesoClick(position: Int) {
