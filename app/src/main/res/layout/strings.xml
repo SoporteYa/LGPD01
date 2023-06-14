@@ -1,0 +1,68 @@
+<resources>
+    <string name="app_name">LGPD001</string>
+    <string name="email">Email</string>
+    <string name="password">Contrasena</string>
+    <string name="Repeat_Password">Repetir Contrasena</string>
+    <string name="Name">Nombre</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="edit">Editar</string>
+    <string name="favorite">Guardar</string>
+    <string name="more">Más Opciones</string>
+    <string name="content_description_search">Contenido para editar descripción</string>
+    <string name="content_description_favorite">contenido para guardar favoritos</string>
+    <string name="content_description_more">insertar más contenido</string>
+    <string name="LGPD">LGPD</string>
+    <string name="menu">menú</string>
+    <string name="RegistrarEmpresa">Registrar Empresa</string>
+    <string name="RegistrarSectores">Registrar Sectores</string>
+    <string name="RegistrarProcesos">Registrar Procesos</string>
+    <string name="title_activity_proceso">ProcesoActivity</string>
+    <string name="CerrarSesión">Cerrar Sesión</string>
+    <string name="MasOpciones">Más Opciones</string>
+    <string name="Empresa_1">Empresa_1</string>
+    <string name="Empresa_2">Empresa_2</string>
+    <string name="Empresa_3">Empresa_3</string>
+    <string name="companies">Empresas</string>
+    <string name="company">Empresa</string>
+    <string name="Address">Dirección empresa</string>
+    <string name="RegisterCompany">Registrar Empresa</string>
+    <string name="save">Guardar</string>
+    <string name="Delete">Borrar</string>
+    <string name="Administración_Gestion">Administración y Gestión</string>
+    <string name="Telecomunicaciones">Telecomunicaciones</string>
+    <string name="Comercio">Comercio</string>
+    <string name="Finanzas_Seguros">Finanzas y Seguros</string>
+    <string name="Transporte_Logistica">Transporte y Logística</string>
+    <string name="Sanidad">Sanidad</string>
+    <string name="Comunicación_Marketing">Medios de Comunicación y Marketing</string>
+    <string name="users">Usuarios</string>
+    <string name="Process">Procesos</string>
+    <string name="sector">Sectores</string>
+    <string name="lastName">Apellidos</string>
+    <string name="RegisterProcess">Registrar Proceso</string>
+    <string name="empleados">empleados</string>
+    <string name="IT">IT_Informatica</string>
+    <string name="btnguardarSector">Guardar</string>
+    <string name="access">Codigo_Acceso</string>
+    <string name="DPO">DPO</string>
+    <string name="pregunta">Pregunta:</string>
+
+    <string-array name="componentes">
+        <item>Seleccionar componente</item>
+        <item>editText</item>
+        <item>checkbox</item>
+        <item>checkbox2</item>
+        <item>checkbox3</item>
+        <item>radioButton1</item>
+        <item>radioButton2</item>
+        <item>radioButton3</item>
+
+    </string-array>
+</resources>
