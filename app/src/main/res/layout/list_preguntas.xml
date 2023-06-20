@@ -1,0 +1,53 @@
+<!-- item_pregunta.xml -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvEnunciado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:padding="8dp"
+        android:text="Enunciado"/>
+
+
+
+    <CheckBox
+        android:id="@+id/checkBoxOpcion1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:padding="8dp"
+        android:text="Opción 1"/>
+
+    <CheckBox
+        android:id="@+id/checkBoxOpcion2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:padding="8dp"
+        android:text="Opción 2"/>
+
+    <CheckBox
+        android:id="@+id/checkBoxOpcion3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:padding="8dp"
+        android:text="Opción 3"/>
+
+    <CheckBox
+        android:id="@+id/checkBoxOpcion4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:padding="8dp"
+        android:text="Opción 4"/>
+
+
+</LinearLayout>
