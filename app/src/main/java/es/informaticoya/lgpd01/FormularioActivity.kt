@@ -1,15 +1,19 @@
 package es.informaticoya.lgpd01
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.TextView
-import com.google.android.play.core.integrity.i
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
 import es.informaticoya.lgpd01.databinding.ActivityFormularioBinding
 
 class FormularioActivity : AppCompatActivity() {
@@ -18,6 +22,9 @@ class FormularioActivity : AppCompatActivity() {
     private lateinit var metodoRespuestaSpinner: Spinner
     private lateinit var layoutRespuestas: LinearLayout
     private val preguntasRespuestas = mutableListOf<PreguntaRespuesta>()
+    private val db = FirebaseFirestore.getInstance()
+    private lateinit var adapter: PreguntasRespuestasMyAdapter
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,9 +33,21 @@ class FormularioActivity : AppCompatActivity() {
 
         metodoRespuestaSpinner = findViewById(R.id.spinnerMetodoRespuesta)
         layoutRespuestas = findViewById(R.id.layoutRespuestas)
+        adapter = PreguntasRespuestasMyAdapter(preguntasRespuestas)
+        recyclerView.adapter = adapter
+
+        // Configurar el Spinner
+        val opcionesSpinner = arrayOf("Respuesta de texto", "Respuesta de opciones")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, opcionesSpinner)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        metodoRespuestaSpinner.adapter = adapter
 
         binding.btnAgregarRespuesta.setOnClickListener { view ->
             agregarRespuesta(view)
+        }
+
+        binding.btnEliminarRespuesta.setOnClickListener { view ->
+            eliminarRespuesta(view)
         }
 
         binding.btnGuardarPregunta.setOnClickListener { view ->
@@ -40,48 +59,120 @@ class FormularioActivity : AppCompatActivity() {
         val preguntaEditText = findViewById<EditText>(R.id.editTextPregunta)
         val pregunta = preguntaEditText.text.toString()
 
-        val radioGroup = findViewById<RadioGroup>(R.id.radioGroupRespuestas)
+        val respuestaLayout = when (metodoRespuestaSpinner.selectedItemPosition) {
+            0 -> createEditTextLayout()
+            1 -> createRadioGroupLayout()
+            else -> null
+        }
 
-        val radioButton = RadioButton(this)
-        radioButton.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        radioButton.text = ""
+        respuestaLayout?.let {
+            layoutRespuestas.addView(it)
+            preguntasRespuestas.add(PreguntaRespuesta(pregunta, getRespuestas(it)))
+        }
+    }
 
+    fun eliminarRespuesta(view: View) {
+        if (layoutRespuestas.childCount > 0) {
+            layoutRespuestas.removeViewAt(layoutRespuestas.childCount - 1)
+            preguntasRespuestas.removeAt(preguntasRespuestas.size - 1)
+        }
+    }
+
+    private fun createEditTextLayout(): View {
         val respuestaEditText = EditText(this)
         respuestaEditText.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
+        return respuestaEditText
+    }
+
+    private fun createRadioGroupLayout(): View {
+        val radioGroup = RadioGroup(this)
+        radioGroup.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        val addButton = Button(this)
+        addButton.text = "Agregar opción"
+        addButton.setOnClickListener {
+            val radioButtonLayout = LinearLayout(this)
+            radioButtonLayout.orientation = LinearLayout.HORIZONTAL
+
+            val radioButton = RadioButton(this)
+            radioButton.text = ""
+
+            val respuestaEditText = EditText(this)
+            respuestaEditText.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+
+            radioButtonLayout.addView(radioButton)
+            radioButtonLayout.addView(respuestaEditText)
+
+            radioGroup.addView(radioButtonLayout)
+        }
+
+        val removeButton = Button(this)
+        removeButton.text = "Eliminar opción"
+        removeButton.setOnClickListener {
+            if (radioGroup.childCount > 0) {
+                radioGroup.removeViewAt(radioGroup.childCount - 1)
+            }
+        }
+
+        val buttonLayout = LinearLayout(this)
+        buttonLayout.addView(addButton)
+        buttonLayout.addView(removeButton)
+
+        val layout = LinearLayout(this)
+        layout.orientation = LinearLayout.VERTICAL
+        layout.addView(radioGroup)
+        layout.addView(buttonLayout)
+
+        return layout
+    }
 
 
-        val radioButtonLayout = LinearLayout(this)
-        radioButtonLayout.orientation = LinearLayout.HORIZONTAL
-        radioButtonLayout.addView(radioButton)
-        radioButtonLayout.addView(respuestaEditText)
+    private fun getRespuestas(view: View): List<String> {
+        val respuestas = mutableListOf<String>()
 
-        radioGroup.addView(radioButtonLayout)
+        when (view) {
+            is EditText -> respuestas.add(view.text.toString())
+            is RadioGroup -> {
+                for (i in 0 until view.childCount) {
+                    val radioButton = view.getChildAt(i) as? RadioButton
+                    radioButton?.let {
+                        respuestas.add(it.text.toString())
+                    }
+                }
+            }
+        }
 
-        preguntasRespuestas.add(PreguntaRespuesta(pregunta, listOf(respuestaEditText.text.toString())))
+        return respuestas
     }
 
     fun guardarPregunta(view: View) {
         val preguntaEditText = findViewById<EditText>(R.id.editTextPregunta)
         val pregunta = preguntaEditText.text.toString()
 
-        val radioGroup = findViewById<RadioGroup>(R.id.radioGroupRespuestas)
-
-        val respuestas = mutableListOf<String>()
-
-        for (i in 0 until radioGroup.childCount) {
-            val radioButton = radioGroup.getChildAt(i) as RadioButton
-            val respuesta = radioButton.text.toString()
-            respuestas.add(respuesta)
-        }
-
-        preguntasRespuestas[preguntasRespuestas.size - 1] = PreguntaRespuesta(pregunta, respuestas)
         mostrarFormulario()
+
+        // Guardar la pregunta y respuestas en Firestore
+        val preguntaRespuesta = PreguntaRespuesta(pregunta, preguntasRespuestas.last().respuestas)
+        db.collection("preguntas").add(preguntaRespuesta)
+            .addOnSuccessListener { documentReference ->
+                Toast.makeText(this, "Pregunta guardada en Firestore", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(
+                    this,
+                    "Error al guardar la pregunta: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
     }
 
 
@@ -93,20 +184,23 @@ class FormularioActivity : AppCompatActivity() {
             preguntaTextView.text = preguntaRespuesta.pregunta
             layoutRespuestas.addView(preguntaTextView)
 
+            val radioGroup = RadioGroup(this)
+            radioGroup.orientation = RadioGroup.VERTICAL
+
             for (respuesta in preguntaRespuesta.respuestas) {
-                val respuestaTextView = TextView(this)
-                respuestaTextView.text = respuesta
-                layoutRespuestas.addView(respuestaTextView)
+                val radioButton = RadioButton(this)
+                radioButton.text = respuesta
+
+                radioGroup.addView(radioButton)
             }
+
+            layoutRespuestas.addView(radioGroup)
         }
     }
-
-    private fun obtenerNumeroRespuestas(): Int {
-        // Aquí puedes implementar la lógica para obtener el número de respuestas deseado, por ejemplo, mostrar un cuadro de diálogo para que el usuario ingrese la cantidad de respuestas o utilizar un EditText adicional en la actividad para que el usuario escriba la cantidad.
-        // Retorna el número de respuestas ingresado por el usuario.
-        return 0
-    }
 }
+
+
+
 
 
 
