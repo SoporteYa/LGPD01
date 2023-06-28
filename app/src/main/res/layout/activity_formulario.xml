@@ -1,26 +1,87 @@
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".FormularioActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewFormulario"
+        <EditText
+            android:id="@+id/editTextPregunta"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Escribe una pregunta" />
+
+        <TextView
+            android:id="@+id/textViewPregunta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/list_preguntas" />
+            android:textAppearance="?android:textAppearanceMedium"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerMetodoRespuesta"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:prompt="@string/metodo_respuesta_prompt"
+            android:entries="@array/metodos_respuesta" />
+
+        <LinearLayout
+            android:id="@+id/layoutRespuestas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <RadioGroup
+                android:id="@+id/radioGroupRespuestas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/btnSaveFormulario"
+            android:id="@+id/btnAgregarRespuesta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Guardar formulario"
-            android:layout_gravity="center_horizontal"/>
+            android:text="Agregar respuesta"
+            android:onClick="agregarRespuesta" />
+
+        <Button
+            android:id="@+id/btnEliminarRespuesta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eliminar respuesta"
+            android:onClick="eliminarRespuesta" />
+
+        <Button
+            android:id="@+id/btnGuardarPregunta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Guardar Pregunta" />
+
+        <Button
+            android:id="@+id/btnMostrarPreguntas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mostrar preguntas" />
+
+        <Button
+            android:id="@+id/btnIniciarPreguntas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Empezar Cuestionario" />
 
     </LinearLayout>
-</ScrollView>
+
+</androidx.core.widget.NestedScrollView>
