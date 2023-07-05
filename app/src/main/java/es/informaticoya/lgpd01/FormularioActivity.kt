@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import es.informaticoya.lgpd01.databinding.ActivityFormularioBinding
 import android.widget.LinearLayout
@@ -16,13 +15,14 @@ class FormularioActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFormularioBinding
     private lateinit var metodoRespuestaSpinner: Spinner
     private lateinit var layoutRespuestas: LinearLayout
+
     //private val preguntasRespuestas = mutableListOf<PreguntaRespuesta>()
     private val db = FirebaseFirestore.getInstance()
     //private var preguntaGuardada = false
     //private val respuestasMap: MutableMap<String, String> = mutableMapOf()
     //private val respuestasList: MutableList<Pair<String, Boolean>> = mutableListOf()
 
-    private val respuestasList: MutableList<Pair<EditText, CheckBox>> = mutableListOf()
+    private val respuestasList: MutableList<Pair<EditText?, CheckBox?>> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,29 +52,57 @@ class FormularioActivity : AppCompatActivity() {
         }
 
         binding.btnIniciarPreguntas.setOnClickListener { view ->
-             iniciarPreguntas(view)
+            iniciarPreguntas(view)
+        }
+
+        binding.btnFormulario.setOnClickListener {
+            startActivity(Intent(this, FormularioCompletoActivity::class.java))
         }
     }
 
 
     fun agregarRespuesta(view: View) {
-        val respuestaEditText = EditText(this)
-        respuestaEditText.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        layoutRespuestas.addView(respuestaEditText)
+        val selectedOption = metodoRespuestaSpinner.selectedItem.toString()
 
-        val checkBox = CheckBox(this)
-        checkBox.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        layoutRespuestas.addView(checkBox)
+        if (selectedOption == "Respuesta de texto") {
+            val respuestaEditText = EditText(this)
+            respuestaEditText.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            layoutRespuestas.addView(respuestaEditText)
 
-        respuestasList.add(Pair(respuestaEditText, checkBox))
+            respuestasList.add(Pair(respuestaEditText, null))
+        } else if (selectedOption == "Respuesta de opciones") {
+            val linearLayout = LinearLayout(this)
+            linearLayout.orientation = LinearLayout.HORIZONTAL
+
+            val checkBox = CheckBox(this)
+            checkBox.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            linearLayout.addView(checkBox)
+
+            val respuestaEditText = EditText(this)
+            respuestaEditText.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            linearLayout.addView(respuestaEditText)
+
+            layoutRespuestas.addView(linearLayout)
+
+            respuestasList.add(Pair(respuestaEditText, checkBox))
+        }
+
+        // Mostrar u ocultar el EditText de respuesta libre según el tipo de respuesta seleccionada
+        val respuestaLibreEditText = findViewById<EditText>(R.id.editTextRespuesta)
+        respuestaLibreEditText.visibility =
+            if (selectedOption == "Respuesta de texto") View.VISIBLE else View.GONE
     }
 
+// ...
 
     fun guardarPregunta(view: View) {
         val preguntaEditText = findViewById<EditText>(R.id.editTextPregunta)
@@ -83,12 +111,19 @@ class FormularioActivity : AppCompatActivity() {
         // Obtén las respuestas ingresadas por el usuario
         val respuestas = ArrayList<String>()
         for (respuestaPair in respuestasList) {
-            val respuestaEditText = respuestaPair.first as EditText
-            val respuesta = respuestaEditText.text.toString()
-            respuestas.add("\"$respuesta\"")
+            val respuestaEditText = respuestaPair.first
+            val respuestaCheckBox = respuestaPair.second
+
+            if (respuestaEditText != null) {
+                val respuestaText = respuestaEditText.text.toString()
+                respuestas.add("\"$respuestaText\"")
+            } else if (respuestaCheckBox != null && respuestaCheckBox.isChecked) {
+                respuestas.add("\"\"")
+            }
         }
 
-        // Guarda la pregunta y respuestas en Firestore
+        // Resto del código para guardar la pregunta y respuestas en Firestore
+        // .// Guarda la pregunta y respuestas en Firestore
         val preguntaRespuesta = PreguntaRespuesta(pregunta, respuestas)
         db.collection("preguntas").add(preguntaRespuesta)
             .addOnSuccessListener { documentReference ->
@@ -109,6 +144,8 @@ class FormularioActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+        // Limpia la lista de respuestas después de guardar en Firestore
+        respuestasList.clear()
     }
 
 
@@ -131,79 +168,86 @@ class FormularioActivity : AppCompatActivity() {
 
 }
 
-
-
-
-   /* private fun getRespuestas(view: View): List<String> {
-        val respuestas = mutableListOf<String>()
-
-        when (view) {
-            is EditText -> {
-                val respuesta = view.text.toString().trim()
-                if (respuesta.isNotEmpty()) {
-                    respuestas.add(respuesta)
-                }
-            }
-            is LinearLayout -> {
-                for (i in 0 until view.childCount) {
-                    val childView = view.getChildAt(i)
-                    if (childView is LinearLayout) {
-                        val respuestaEditText = childView.getChildAt(1) as EditText
-                        val respuesta = respuestaEditText.text.toString().trim()
-                        if (respuesta.isNotEmpty()) {
-                            respuestas.add(respuesta)
-                        }
-                    }
-                }
-            }
-        }
-
-        return respuestas
-    }*/
-
-   /* private fun createCheckBoxLayout(): View {
-        val linearLayout = LinearLayout(this)
-        linearLayout.orientation = LinearLayout.VERTICAL
-
-        val addButton = Button(this)
-        addButton.text = "Agregar opción"
-        addButton.setOnClickListener {
-            val checkBoxLayout = LinearLayout(this)
-            checkBoxLayout.orientation = LinearLayout.HORIZONTAL
-
-            val checkBox = CheckBox(this)
-            checkBox.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            checkBoxLayout.addView(checkBox)
-
-            val respuestaEditText = EditText(this)
-            respuestaEditText.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            checkBoxLayout.addView(respuestaEditText)
-
-            linearLayout.addView(checkBoxLayout)
-        }
-
-        layoutRespuestas.addView(addButton)
-
-        return linearLayout
+private fun <E> MutableList<E>.add(element: Pair<EditText?, CheckBox?>) {
+    element.first?.let { editText ->
+        this.add(editText as E)
     }
-
-
-    private fun createEditTextLayout(): View {
-        val editText = EditText(this)
-        editText.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        editText.hint = "Respuesta"
-
-        return editText
+    element.second?.let { checkBox ->
+        this.add(checkBox as E)
     }
+}
+
+
+/* private fun getRespuestas(view: View): List<String> {
+     val respuestas = mutableListOf<String>()
+
+     when (view) {
+         is EditText -> {
+             val respuesta = view.text.toString().trim()
+             if (respuesta.isNotEmpty()) {
+                 respuestas.add(respuesta)
+             }
+         }
+         is LinearLayout -> {
+             for (i in 0 until view.childCount) {
+                 val childView = view.getChildAt(i)
+                 if (childView is LinearLayout) {
+                     val respuestaEditText = childView.getChildAt(1) as EditText
+                     val respuesta = respuestaEditText.text.toString().trim()
+                     if (respuesta.isNotEmpty()) {
+                         respuestas.add(respuesta)
+                     }
+                 }
+             }
+         }
+     }
+
+     return respuestas
+ }*/
+
+/* private fun createCheckBoxLayout(): View {
+     val linearLayout = LinearLayout(this)
+     linearLayout.orientation = LinearLayout.VERTICAL
+
+     val addButton = Button(this)
+     addButton.text = "Agregar opción"
+     addButton.setOnClickListener {
+         val checkBoxLayout = LinearLayout(this)
+         checkBoxLayout.orientation = LinearLayout.HORIZONTAL
+
+         val checkBox = CheckBox(this)
+         checkBox.layoutParams = LinearLayout.LayoutParams(
+             LinearLayout.LayoutParams.WRAP_CONTENT,
+             LinearLayout.LayoutParams.WRAP_CONTENT
+         )
+         checkBoxLayout.addView(checkBox)
+
+         val respuestaEditText = EditText(this)
+         respuestaEditText.layoutParams = LinearLayout.LayoutParams(
+             LinearLayout.LayoutParams.MATCH_PARENT,
+             LinearLayout.LayoutParams.WRAP_CONTENT
+         )
+         checkBoxLayout.addView(respuestaEditText)
+
+         linearLayout.addView(checkBoxLayout)
+     }
+
+     layoutRespuestas.addView(addButton)
+
+     return linearLayout
+ }
+
+
+ private fun createEditTextLayout(): View {
+     val editText = EditText(this)
+     editText.layoutParams = LinearLayout.LayoutParams(
+         LinearLayout.LayoutParams.MATCH_PARENT,
+         LinearLayout.LayoutParams.WRAP_CONTENT
+     )
+     editText.hint = "Respuesta"
+
+     return editText
+ }
 }*/
 
 

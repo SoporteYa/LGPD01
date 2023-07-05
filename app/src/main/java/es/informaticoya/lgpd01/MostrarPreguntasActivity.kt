@@ -33,7 +33,7 @@ class MostrarPreguntasActivity : AppCompatActivity() {
         cargarPreguntasDesdeFirestore()
 
 
-       binding.btnSiguiente.setOnClickListener {
+        binding.btnSiguiente.setOnClickListener {
             mostrarSiguientePregunta()
         }
 
@@ -78,12 +78,11 @@ class MostrarPreguntasActivity : AppCompatActivity() {
 
         for (respuesta in preguntaRespuesta.respuestas) {
             val radioButton = RadioButton(this)
-            radioButton.text = respuesta
+            radioButton.text = respuesta.toString()
 
             radioGroupRespuestas.addView(radioButton)
         }
     }
 
 }
-
 
