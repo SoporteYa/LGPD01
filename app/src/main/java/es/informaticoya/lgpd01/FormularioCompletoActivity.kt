@@ -17,17 +17,17 @@ class FormularioCompletoActivity : AppCompatActivity() {
     private val preguntaRespuestasList = ArrayList<PreguntaRespuesta>()
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFormularioCompletoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        recyclerView = findViewById(R.id.rvFormulario)
+        recyclerView = binding.rvFormulario
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        adapter = FormularioCompletoAdapter(emptyList()) // Inicialmente vacío
+        adapter = FormularioCompletoAdapter(emptyList())
         recyclerView.adapter = adapter
-
         cargarPreguntasDesdeFirestore()
 
     }

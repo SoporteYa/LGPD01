@@ -47,7 +47,6 @@ class FormularioCompletoAdapter(emptyList: List<Any>) : RecyclerView.Adapter<For
                 opcionesRadioGroup.addView(radioButton)
             }
 
-
             botonEditar.setOnClickListener {
                 // Acción para el botón "Editar"
                 // Puedes implementar aquí la lógica para editar la pregunta y respuestas
@@ -58,11 +57,10 @@ class FormularioCompletoAdapter(emptyList: List<Any>) : RecyclerView.Adapter<For
                 // Puedes implementar aquí la lógica para borrar la pregunta y respuestas
             }
         }
+    }
 
-
-        fun actualizarLista(nuevaLista: List<PreguntaRespuesta>) {
-            preguntasRespuestas = nuevaLista as MutableList<PreguntaRespuesta>
-            notifyDataSetChanged()
-        }
+    fun actualizarLista(nuevaLista: List<PreguntaRespuesta>) {
+        preguntasRespuestas = nuevaLista.toMutableList()
+        notifyDataSetChanged()
     }
 }
