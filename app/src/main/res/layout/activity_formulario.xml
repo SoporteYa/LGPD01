@@ -37,16 +37,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <RadioGroup
-                android:id="@+id/radioGroupRespuestas"
+            <EditText
+                android:id="@+id/editTextRespuesta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:hint="Ingrese la respuesta"
+                android:visibility="gone"/>
+
+            <CheckBox
+                android:id="@+id/respuestasCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+            </CheckBox>
+
 
         </LinearLayout>
 
@@ -71,16 +76,16 @@
             android:text="Guardar Pregunta" />
 
         <Button
-            android:id="@+id/btnMostrarPreguntas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mostrar preguntas" />
-
-        <Button
             android:id="@+id/btnIniciarPreguntas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Empezar Cuestionario" />
+
+        <Button
+            android:id="@+id/btnFormulario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Formulario completo" />
 
     </LinearLayout>
 

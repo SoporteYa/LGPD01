@@ -17,12 +17,12 @@
         <TextView
             android:id="@+id/preguntaTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginTop="16dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="40dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:padding="16dp" />
+            android:padding="16dp"
+            android:hint="Ingrese la pregunta"/>
 
         <EditText
             android:id="@+id/editTextRespuesta"
