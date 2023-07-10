@@ -1,17 +1,18 @@
 package es.informaticoya.lgpd01
 
+import android.content.ContentValues.TAG
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class FormularioCompletoAdapter(private var preguntasRespuestas: MutableList<PreguntaRespuesta>) :
@@ -22,6 +23,7 @@ class FormularioCompletoAdapter(private var preguntasRespuestas: MutableList<Pre
     }
 
     private var editarPreguntaRespuestaListener: EditarPreguntaRespuestaListener? = null
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -49,11 +51,28 @@ class FormularioCompletoAdapter(private var preguntasRespuestas: MutableList<Pre
         editarPreguntaRespuestaListener = listener
     }
 
+    private val db = FirebaseFirestore.getInstance()
+
+    fun borrarPregunta(position: Int) {
+        val preguntaRespuesta = preguntasRespuestas[position]
+        val preguntaId = preguntaRespuesta.id
+
+        db.collection("preguntas").document(preguntaId)
+            .delete()
+            .addOnSuccessListener {
+               // Toast.makeText(context, "Pregunta eliminada correctamente", Toast.LENGTH_LONG) .show()
+                preguntasRespuestas.removeAt(position)
+                notifyItemRemoved(position)
+            }
+            .addOnFailureListener { e ->
+                //Toast.makeText(context, "La pregunta no ha sido borrada", Toast.LENGTH_LONG).show()
+                Log.e(TAG, "Error al eliminar la pregunta: ${e.message}")
+            }
+    }
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val preguntaTextView: TextView = itemView.findViewById(R.id.preguntaTextView)
-        private val opcionesRadioGroup: RadioGroup =
-            itemView.findViewById(R.id.radioGroupRespuestas)
+        private val opcionesRadioGroup: RadioGroup = itemView.findViewById(R.id.radioGroupRespuestas)
         private val botonEditar: Button = itemView.findViewById(R.id.botonEditar)
         private val botonBorrar: Button = itemView.findViewById(R.id.botonBorrar)
 
@@ -72,8 +91,12 @@ class FormularioCompletoAdapter(private var preguntasRespuestas: MutableList<Pre
             }
 
             botonBorrar.setOnClickListener {
-                // Acción para el botón "Borrar"
-                // Puedes implementar aquí la lógica para borrar la pregunta y respuestas
+                val adapterPosition = bindingAdapterPosition
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    preguntasRespuestas.removeAt(adapterPosition)
+                    notifyItemRemoved(adapterPosition)
+                    eliminarPreguntaFirestore(adapterPosition)
+                }
             }
         }
 
@@ -90,24 +113,45 @@ class FormularioCompletoAdapter(private var preguntasRespuestas: MutableList<Pre
             }
         }
     }
+
     private fun obtenerRespuestasDesdeRadioGroup(radioGroup: RadioGroup): List<String> {
-        val respuestas = mutableListOf<String>()
-        for (i in 0 until radioGroup.childCount) {
-            val radioButton = radioGroup.getChildAt(i) as? RadioButton
-            if (radioButton != null && radioButton.isChecked) {
-                respuestas.add(radioButton.text.toString())
+            val respuestas = mutableListOf<String>()
+            for (i in 0 until radioGroup.childCount) {
+                val radioButton = radioGroup.getChildAt(i) as? RadioButton
+                if (radioButton != null && radioButton.isChecked) {
+                    respuestas.add(radioButton.text.toString())
+                }
+            }
+            return respuestas
+        }
+
+        fun actualizarPreguntaRespuesta(
+            preguntaRespuestaAntigua: PreguntaRespuesta,
+            preguntaRespuestaNueva: PreguntaRespuesta
+        ) {
+            val posicion = preguntasRespuestas.indexOf(preguntaRespuestaAntigua)
+            if (posicion != -1) {
+                preguntasRespuestas[posicion] = preguntaRespuestaNueva
+                notifyItemChanged(posicion)
             }
         }
-        return respuestas
+
+    private fun eliminarPreguntaFirestore(position: Int) {
+        val preguntaRespuesta = preguntasRespuestas[position]
+        val preguntaId = preguntaRespuesta.id
+
+        val db = FirebaseFirestore.getInstance()
+        db.collection("preguntas").document(preguntaId)
+            .delete()
+            .addOnSuccessListener {
+               // Toast.makeText(context, "Pregunta eliminada correctamente", Toast.LENGTH_LONG).show()
+            }
+            .addOnFailureListener { e ->
+               // Toast.makeText(context, "Error al eliminar la pregunta: ${e.message}", Toast.LENGTH_LONG).show()
+                Log.e(TAG, "Error al eliminar la pregunta: ${e.message}")
+            }
     }
 
-    fun actualizarPreguntaRespuesta(preguntaRespuestaAntigua: PreguntaRespuesta, preguntaRespuestaNueva: PreguntaRespuesta) {
-        val posicion = preguntasRespuestas.indexOf(preguntaRespuestaAntigua)
-        if (posicion != -1) {
-            preguntasRespuestas[posicion] = preguntaRespuestaNueva
-            notifyItemChanged(posicion)
-        }
     }
 
-}
 

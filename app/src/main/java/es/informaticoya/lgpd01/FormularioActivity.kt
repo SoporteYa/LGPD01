@@ -178,6 +178,7 @@ private fun <E> MutableList<E>.add(element: Pair<EditText?, CheckBox?>) {
 }
 
 
+
 /* private fun getRespuestas(view: View): List<String> {
      val respuestas = mutableListOf<String>()
 

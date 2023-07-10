@@ -1,21 +1,20 @@
 package es.informaticoya.lgpd01
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import es.informaticoya.lgpd01.databinding.ActivityFormularioCompletoBinding
+
 
 class FormularioCompletoActivity : AppCompatActivity(),
     FormularioCompletoAdapter.EditarPreguntaRespuestaListener {
@@ -63,7 +62,8 @@ class FormularioCompletoActivity : AppCompatActivity(),
     }
 
     override fun onEditarPreguntaRespuesta(preguntaRespuesta: PreguntaRespuesta) {
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.editar_preguntas_respuestas, null)
+        val dialogView =
+            LayoutInflater.from(this).inflate(R.layout.editar_preguntas_respuestas, null)
         val editTextPregunta = dialogView.findViewById<EditText>(R.id.editTextPregunta)
         editTextPregunta.setText(preguntaRespuesta.pregunta)
 
@@ -100,13 +100,38 @@ class FormularioCompletoActivity : AppCompatActivity(),
                         nuevasRespuestas.add(respuesta)
                     }
                 }
-                val nuevaPreguntaRespuesta = PreguntaRespuesta(nuevaPregunta, nuevasRespuestas)
-                adapter.actualizarPreguntaRespuesta(preguntaRespuesta, nuevaPreguntaRespuesta)
+
+                // Crear una nueva instancia de PreguntaRespuesta con la pregunta y respuestas actualizadas
+                val preguntaActualizada =
+                    PreguntaRespuesta(nuevaPregunta, nuevasRespuestas, preguntaRespuesta.id)
+
+                // Actualizar el documento en Firestore utilizando el identificador (id)
+                db.collection("preguntas").document(preguntaRespuesta.id)
+                    .set(preguntaActualizada)
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            this,
+                            "Pregunta actualizada correctamente",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(
+                            this,
+                            "No se ha podido actualizar la pregunta",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
             }
             .setNegativeButton("Cancelar", null)
 
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
     }
+
+
 }
+
+
+
 
